@@ -1,0 +1,7 @@
+UPDATE DailyActivity
+SET Week_Day = DATENAME(Weekday, ActivityDate),
+TotalSleepTime = s.TotalMinutesAsleep,
+TotalBedTime = s.TotalTimeInBed
+FROM DailyActivityAS a
+FULL JOIN sleepDay AS s 
+ON a.Id = s.Id AND a.ActivityDate = s.SleepDay
