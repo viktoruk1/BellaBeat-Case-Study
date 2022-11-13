@@ -1,0 +1,22 @@
+CREATE TABLE Activity_Minutes( Id BIGINT, Date DATE, Time TIME, Weekday TEXT, Calories FLOAT, Intensity INT, Steps INT, METs INT, Sleep INT)
+
+INSERT Activity_Minutes(Id, Date, Time, Weekday, Calories, Intensity, Steps, METs, Sleep)
+
+(SELECT c.Id, 
+CAST(c.ActivityMinute AS DATE) AS Date, 
+CAST(c.ActivityMinute AS time) AS Time,
+DATENAME(weekday, c.ActivityMinute) AS Weekday,
+ c.Calories, 
+ i.Intensity, 
+ st.Steps,
+ m.METs,
+ sl.Sleep
+FROM minuteCaloriesNarrow AS c
+FULL OUTER JOIN minuteIntensitiesNarrow AS i
+ON c.Id = i.Id AND c.ActivityMinute = i.ActivityMinute
+FULL OUTER JOIN minuteStepsNarrow AS st 
+ON st.Id = i.Id AND st.ActivityMinute = i.ActivityMinute
+FULL OUTER JOIN minuteMETsNarrow AS m 
+ON m.Id = i.Id AND m.ActivityMinute = i.ActivityMinute
+FULL OUTER JOIN 
+minuteSleep AS sl ON sl.Id = i.Id AND sl.date = i.ActivityMinute)
