@@ -1,0 +1,15 @@
+CREATE TABLE Activity_Hourly( Id BIGINT, Date DATE, Time TIME, Weekday TEXT, TotalIntensity INT, AverageIntensity FLOAT, Calories FLOAT, Steps INT)
+
+INSERT Activity_Hourly( Id, Date, Time, Weekday, TotalIntensity, AverageIntensity, Calories, Steps)
+
+(SELECT i.Id,
+ CAST(i.ActivityHour AS date) AS Date, CAST(i.ActivityHour AS time) AS Time, DATENAME(weekday, i.ActivityHour) AS Weekday, 
+ i.TotalIntensity,
+ i.AverageIntensity, 
+ c.Calories, 
+ s.StepTotal
+FROM hourlyIntensities AS i
+JOIN hourlyCalories AS c
+ON i.ActivityHour = c.ActivityHour AND i.Id = c.Id
+JOIN hourlySteps AS s
+ON i.ActivityHour = s.ActivityHour AND i.Id = s.Id)
